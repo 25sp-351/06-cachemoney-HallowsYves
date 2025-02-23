@@ -7,7 +7,7 @@ SOURCE_FILES = main.c memoize.c
 all: $(OUTPUT)
 
 $(OUTPUT): $(SOURCE_FILES) memoize.h  
-	$(CC) $(CFLAGS) -o $(OUTPUT) main.c memoize.c 
+	$(CC) $(CFLAGS) -o $(OUTPUT) main.c memoize.c converter.c
 
 clean:
 	rm -f $(OUTPUT)

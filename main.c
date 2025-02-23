@@ -4,32 +4,33 @@
 
 #include "memoize.h"
 
-
 int main() {
-  int money;
+    int money;
 
-  printf("Enter amount to convert (Ctrl+D to stop):\n");
+    printf("Enter amount to convert (Ctrl+D to stop):\n");
 
-  while (scanf("%d", &money) != EOF) {
-    char* text_representation = converter(money);
+    initialize_memo();
 
-    if (strncmp(text_representation, "Retrieved from cache:", 22) == 0) {
-      printf("%s\n", text_representation);
-      free(text_representation);
-    } else {
-      printf("%d = %s\n", money, text_representation);
-      if (money >= 1500) {
+    char* (*function_pointer)(int) = memoize;
+
+    // Read user input
+    while (scanf("%d", &money) != EOF) {
+        if (money < 0) {
+          printf("Improper value, please enter a value greater than 0.\n");
+          exit(1);
+        }
+        char* text_representation = function_pointer(money);
+        printf("%d = %s\n", money, text_representation);
+
         free(text_representation);
-      }
     }
-  }
 
-  for (int i = 0; i < 1500; i++) {
-    if (memoized[i] != NULL) {
-      free(memoized[i]);
-      memoized[i] = NULL;
+    // Free up Cache
+    for (int i = 0; i < CACHE_SIZE; i++) {
+        if (memoized[i] != NULL) {
+            free(memoized[i]);
+            memoized[i] = NULL;
+        }
     }
-  }
-
-  return 0;
+    return 0;
 }
